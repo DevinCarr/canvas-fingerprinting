@@ -40,22 +40,22 @@
         </style>
     </head>
     <body>
-    <script>
-        function toggleCanvas() {
-            const elem = document.getElementById("c");
-            if (elem.style.display !== "none")
-                elem.style.display = "none";
-            else
-                elem.style.display = "flex";
-        }
-    </script>
+        <script>
+            function toggleCanvas() {
+                const elem = document.getElementById("c");
+                if (elem.style.display !== "none")
+                    elem.style.display = "none";
+                else
+                    elem.style.display = "flex";
+            }
+        </script>
         <h1>Canvas Fingerprinting</h1>
-        
+
         <div id="b">
             <button onClick=toggleCanvas()>Toggle Canvas</button>
         </div>
-        <h3>Fingerprint:</h3>
-        <code id="f"></code>
+        <h2>Fingerprint:</h2>
+        <h2 id="f"></h2>
         <script src="murmur.js"></script>
         <script>
             // create the canvas
@@ -79,7 +79,7 @@
             const fingerprint = canvas.toDataURL("image/png");
             const murmur = Murmur.x64hash128(fingerprint, 42);
             console.log(fingerprint);
-            
+
             // insert into page element
             const elem = document.getElementById("f");
             elem.innerHTML = murmur;
