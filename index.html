@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Canvas Fingerprinting</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+    body{
+        font-family: sans-serif;
+        max-width: 48em;
+        margin: auto;
+        padding: 0 5%;
+        background: #222;
+        color: #fff;
+    }
+
+    h1 {
+        margin: 2em 0 0;
+    }
+
+    p {
+        font-size: 1.2em
+    }
+
+    strong {
+        display: block;
+        letter-spacing: 1px;
+        word-wrap: break-word;
+    }
+
+    @media (min-width: 32em) {
+        h1 {
+            font-size: 4em;
+        }
+
+        strong {
+            font-size: 1.5em;
+        }
+    }
+        </style>
+    </head>
+    <body>
+    <script>
+        function toggleCanvas() {
+            const elem = document.getElementById("c");
+            if (elem.style.display !== "none")
+                elem.style.display = "none";
+            else
+                elem.style.display = "flex";
+        }
+    </script>
+        <h1>Canvas Fingerprinting</h1>
+        
+        <div id="b">
+            <button onClick=toggleCanvas()>Toggle Canvas</button>
+        </div>
+        <h3>Fingerprint:</h3>
+        <code id="f"></code>
+        <script src="murmur.js"></script>
+        <script>
+            // create the canvas
+            const canvas= document.createElement("canvas");
+            canvas.id = "c";
+            canvas.style.display = "none";
+            canvas.height = 30;
+            canvas.width = 460;
+            canvas.style.background = "white";
+
+            // insert it into the dom
+            document.getElementById("b").append(canvas);
+
+            // get the 2d context and apply the text
+            const context = canvas.getContext("2d");
+            context.font = "12pt Arial";
+            context.textBaseline = "top";
+            context.fillText("How quickly daft jumping zebras vex. (Also, punctuation: Ɛ/ζ}Φ)", 2, 2);
+
+            // fetch the base64 encoded image
+            const fingerprint = canvas.toDataURL("image/png");
+            const murmur = Murmur.x64hash128(fingerprint, 42);
+            console.log(fingerprint);
+            
+            // insert into page element
+            const elem = document.getElementById("f");
+            elem.innerHTML = murmur;
+        </script>
+    </body>
+</html>
