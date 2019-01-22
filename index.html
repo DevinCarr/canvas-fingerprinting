@@ -1,163 +1,126 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <title>Canvas Fingerprinting</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-    body{
-        font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-        max-width: 48em;
-        margin: auto;
-        padding: 0 5%;
-        background: #222;
-        color: #fff;
-    }
 
-    h1 {
-        margin: 2em 0 0;
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+    <link rel="canonical" href="https://devincarr.com" />
+    <link rel="stylesheet" href="/static/milligram.min.css">
+    <link rel="stylesheet" href="/static/main.css">
+    <title>Devin Carr - Canvas Fingerprinting</title>
+    <style>
+        canvas {
+        border: black solid 0.1rem;
+        padding: 0.5rem;
     }
+    </style>
+    <script type="application/javascript" src="murmur.js"></script>
+</head>
 
-    p {
-        font-size: 1.2em
-    }
-
-    strong {
-        display: block;
-        letter-spacing: 1px;
-        word-wrap: break-word;
-    }
-    
-    a {
-        color: #fff;
-    }
-
-    pre {
-        margin: auto;
-        background: #333;
-    }
-
-    .example-canvas {
-        display: flex;
-        flex-wrap: wrap;
-    }
-
-    @media (min-width: 32em) {
-        h1 {
-            font-size: 4em;
+<body class="post">
+    <script>
+        function toggleCanvas() {
+            const elem = document.getElementById("c");
+            if (elem.style.display !== "none")
+                elem.style.display = "none";
+            else
+                elem.style.display = "flex";
         }
-
-        strong {
-            font-size: 1.5em;
-        }
-    }
-        </style>
-        <script type="application/javascript" src="murmur.js"></script>
-    </head>
-    <body>
-        <script>
-            function toggleCanvas() {
-                const elem = document.getElementById("c");
-                if (elem.style.display !== "none")
-                    elem.style.display = "none";
-                else
-                    elem.style.display = "flex";
-            }
-        </script>
-        <h1>Canvas Fingerprinting</h1>
-
-        <h2>Fingerprint: <code id="f1"></code></h2>
-
-        <p>Canvas Fingerprinting is fully explained by <a href="https://hovav.net/ucsd/dist/canvas.pdf">this paper</a>.</p>
-        
-        <p>
-            The first step to implementing a basic canvas fingerprint is to have a canvas element on the page. 
-            For image extraction, it is not required that the canvas already exist or is even visible on 
-            the page, the call to <code>canvas.toDataUrl()</code> can be done on an "invisible" canvas element.
-        </p>
-        <div class="example-canvas">
-            <canvas id="c1" height="30" width="700" style="background: white">
-            </canvas>
-            <small>&gt; Canvas Element</small>
+    </script>
+    <div class="container">
+        <!-- Header -->
+        <div class="row">
+            <div class="column timestamp">
+                <small>January 2019</small>
+            </div>
         </div>
+        <!-- End Header -->
+        <!-- Content -->
+        <div class="row">
+            <div class="column">
+                <h2>Canvas Fingerprinting</h2>
+                <hr>
+                <h4>Fingerprint: <code id="f1"></code></h4>
 
-        <p>
-            Then we need to fill the canvas element with some unique text to force as much uniqueness to be 
-            exercised by the OS, GPU, and browser engine. Specifically the text: "How quickly daft jumping 
-            zebras vex. (Also, punctuation: Ɛ/ζ}Φ)" and with 18pt font Arial just as the paper mentioned.
-        </p>
-        <pre><code>
-// get the 2d context and apply the text
+                <p>Canvas Fingerprinting is fully explained by <a href="https://hovav.net/ucsd/dist/canvas.pdf">this
+                        paper</a>.</p>
+                <p>
+                    The first step to implementing a basic canvas fingerprint is to have a canvas element on the page.
+                    For image extraction, it is not required that the canvas already exist or is even visible on
+                    the page, the call to <code>canvas.toDataUrl()</code> can be done on an "invisible" canvas element.
+                </p>
+                <canvas id="c1" height="30" width="700" style="background: white" title="canvas element">
+                </canvas>
+
+                <p>
+                    Then we need to fill the canvas element with some unique text to force as much uniqueness to be
+                    exercised by the OS, GPU, and browser engine. Specifically the text: "How quickly daft jumping
+                    zebras vex. (Also, punctuation: Ɛ/ζ}Φ)" and with 18pt font Arial just as the paper mentioned.
+                </p>
+                <pre><code>// get the 2d context and apply the text
 const context = canvas.getContext("2d");
 context.font = "12pt Arial";
 context.textBaseline = "top";
-context.fillText("How quickly daft jumping zebras vex. (Also, punctuation: Ɛ/ζ}Φ)", 2, 2);
-        </code></pre>
-        <p></p>
-        <div class="example-canvas">
-            <canvas id="c2" height="30" width="700" style="background: white">
-            </canvas>
-            <small>&gt; Canvas Element</small>
-        </div>
-        <script type="application/javascript">
-            (() => {
-                const canvas = document.getElementById("c2");
-                // get the 2d context and apply the text
-                const context = canvas.getContext("2d");
-                context.font = "18pt Arial";
-                context.textBaseline = "top";
-                context.fillText("How quickly daft jumping zebras vex. (Also, punctuation: Ɛ/ζ}Φ)", 2, 2);
-            })();
-        </script>
+context.fillText("How quickly daft jumping zebras vex. (Also, punctuation: Ɛ/ζ}Φ)", 2, 2);</code></pre>
+                <p></p>
+                <canvas id="c2" height="30" width="700" style="background: white" title="canvas element">
+                </canvas>
+                <script type="application/javascript">
+                    (() => {
+                        const canvas = document.getElementById("c2");
+                        // get the 2d context and apply the text
+                        const context = canvas.getContext("2d");
+                        context.font = "18pt Arial";
+                        context.textBaseline = "top";
+                        context.fillText("How quickly daft jumping zebras vex. (Also, punctuation: Ɛ/ζ}Φ)", 2, 2);
+                    })();
+                </script>
 
-        <p>
-            Next we need to fetch the contents of the image in Base64. 
-        </p>
-        <pre><code>
-// fetch the base64 encoded image
-const fingerprint = canvas.toDataURL("image/png");
-        </code></pre>
-        <p>Output:</p>
-        <pre><code id="raw-output"></code></pre>
-        <script type="application/javascript">
-            (() => {
-                const canvas = document.getElementById("c2");
-                const elem = document.getElementById("raw-output");
-                // fetch the base64 encoded image
-                const fingerprint = canvas.toDataURL("image/png");
-                elem.innerHTML = fingerprint.substring(0,90) + "...";
-            })();
-        </script>
+                <p>
+                    Next we need to fetch the contents of the image in Base64.
+                </p>
+                <pre><code>// fetch the base64 encoded image
+const fingerprint = canvas.toDataURL("image/png");</code></pre>
+                <p>Output:</p>
+                <pre><code id="raw-output"></code></pre>
+                <script type="application/javascript">
+                    (() => {
+                        const canvas = document.getElementById("c2");
+                        const elem = document.getElementById("raw-output");
+                        // fetch the base64 encoded image
+                        const fingerprint = canvas.toDataURL("image/png");
+                        elem.innerHTML = fingerprint.substring(0, 90) + "...";
+                    })();
+                </script>
 
-        <p>
-            Now if we take that large Base64 output and run it through a fast hash algorithm (such as 
-            <a href="https://en.wikipedia.org/wiki/MurmurHash">Murmur Hash</a>), we can create a more 
-            reasonable hash to utilize for fingerprinting.
-        </p>
-        <h2>Fingerprint Output: <code id="raw-output-2"></code></h2>
-        <script type="application/javascript">
-            (() => {
-                const canvas = document.getElementById("c2");
-                const elem = document.getElementById("raw-output-2");
-                // fetch the base64 encoded image
-                const fingerprint = canvas.toDataURL("image/png");
-                const murmur = Murmur.x64hash128(fingerprint, 42);
-                elem.innerHTML = murmur;
-            })();
-        </script>
+                <p>
+                    Now if we take that large Base64 output and run it through a fast hash algorithm (such as
+                    <a href="https://en.wikipedia.org/wiki/MurmurHash">Murmur Hash</a>), we can create a more
+                    reasonable hash to utilize for fingerprinting.
+                </p>
+                <h4>Fingerprint Output: <code id="raw-output-2"></code></h4>
+                <script type="application/javascript">
+                    (() => {
+                        const canvas = document.getElementById("c2");
+                        const elem = document.getElementById("raw-output-2");
+                        // fetch the base64 encoded image
+                        const fingerprint = canvas.toDataURL("image/png");
+                        const murmur = Murmur.x64hash128(fingerprint, 42);
+                        elem.innerHTML = murmur;
+                    })();
+                </script>
 
-        <h1>Hidden Canvas Variant</h1>
-        <p>
-            This version shows how you can do the same methods as above without a canvas element originally 
-            on the page. It also shows how no notifications are made to the user about the canvas element 
-            on insertion to the page, or when information is extracted from the element. Now as mentioned in 
-            the paper, there are valid uses to allow these operations normally (image editors, drawing 
-            applications, etc.) but browsers have the capability to notify users when certain actions are 
-            attempting to occur.
-        </p>
+                <h1>Hidden Canvas Variant</h1>
+                <p>
+                    This version shows how you can do the same methods as above without a canvas element originally
+                    on the page. It also shows how no notifications are made to the user about the canvas element
+                    on insertion to the page, or when information is extracted from the element. Now as mentioned in
+                    the paper, there are valid uses to allow these operations normally (image editors, drawing
+                    applications, etc.) but browsers have the capability to notify users when certain actions are
+                    attempting to occur.
+                </p>
 
-        <pre><code>
-// create the canvas
+                <pre><code>// create the canvas
 const canvas= document.createElement("canvas");
 canvas.id = "c3";
 canvas.style.display = "none";
@@ -181,43 +144,60 @@ console.log(fingerprint);
 
 // insert into page element
 const elem = document.getElementById("f2");
-elem.innerHTML = murmur;
-        </code></pre>
+elem.innerHTML = murmur;</code></pre>
 
-        <div id="b">
-            <button onClick=toggleCanvas()>Toggle Canvas</button>
-        </div>
-        <h2>Fingerprint: <code id="f2"></code></h2>
-        <script type="application/javascript">
-            (() => {
-                // create the canvas
-                const canvas= document.createElement("canvas");
-                canvas.id = "c";
-                canvas.style.display = "none";
-                canvas.height = 30;
-                canvas.width = 700;
-                canvas.style.background = "white";
+                <div id="b">
+                    <button onClick=toggleCanvas()>Toggle Canvas</button>
+                </div>
+                <h4>Fingerprint: <code id="f2"></code></h4>
+            </div>
+        </div> <!-- End Content -->
+        <!-- Footer -->
+        <div class="row">
+            <div class="column">
+                <small>
+                    Devin Carr /
+                    <a href="/">Home</a>
+                    /
+                    <a href="/post/">Posts</a>
+                </small>
+            </div>
+            <div class="column">
+                <div class="copyright">Copyright Devin Carr © 2019</div>
+            </div>
+        </div> <!-- End Footer -->
+    </div>
+    <script type="application/javascript">
+        (() => {
+            // create the canvas
+            const canvas = document.createElement("canvas");
+            canvas.id = "c";
+            canvas.style.display = "none";
+            canvas.height = 30;
+            canvas.width = 700;
+            canvas.style.background = "white";
 
-                // insert it into the dom
-                document.getElementById("b").append(canvas);
+            // insert it into the dom
+            document.getElementById("b").append(canvas);
 
-                // get the 2d context and apply the text
-                const context = canvas.getContext("2d");
-                context.font = "18pt Arial";
-                context.textBaseline = "top";
-                context.fillText("How quickly daft jumping zebras vex. (Also, punctuation: Ɛ/ζ}Φ)", 2, 2);
+            // get the 2d context and apply the text
+            const context = canvas.getContext("2d");
+            context.font = "18pt Arial";
+            context.textBaseline = "top";
+            context.fillText("How quickly daft jumping zebras vex. (Also, punctuation: Ɛ/ζ}Φ)", 2, 2);
 
-                // fetch the base64 encoded image
-                const fingerprint = canvas.toDataURL("image/png");
-                const murmur = Murmur.x64hash128(fingerprint, 42);
-                console.log(fingerprint);
+            // fetch the base64 encoded image
+            const fingerprint = canvas.toDataURL("image/png");
+            const murmur = Murmur.x64hash128(fingerprint, 42);
+            console.log(fingerprint);
 
-                // insert into page element
-                const elem1 = document.getElementById("f1");
-                const elem2 = document.getElementById("f2");
-                elem1.innerHTML = murmur;
-                elem2.innerHTML = murmur;
-            })();
-        </script>
-    </body>
+            // insert into page element
+            const elem1 = document.getElementById("f1");
+            const elem2 = document.getElementById("f2");
+            elem1.innerHTML = murmur;
+            elem2.innerHTML = murmur;
+        })();
+    </script>
+</body>
+
 </html>
